@@ -75,13 +75,10 @@ func formatValidationErrors(p map[string]string) []byte {
 		Type:  "Validation Errors",
 		Trace: formatValidationPayload(p),
 	}
-
 	wrapper := mappers.Error{
 		Payload: payload,
 	}
-
 	message, _ := json.Marshal(wrapper)
-
 	return message
 }
 
@@ -96,25 +93,20 @@ func formatUnknownError(err error) transformers.ErrorTransformer {
 // formatValidationPayload does a final round of formatting to validation errors.
 func formatValidationPayload(p map[string]string) map[string]string {
 	ep := make(map[string]string)
-
 	for k, v := range p {
 		ek := formatKey(k)
 		ep[ek] = v
 	}
-
 	return ep
 }
 
 // formatKey formats the key as a snake case string consisting only of lowercase characters.
 func formatKey(k string) string {
 	kParts := strings.Split(k, ".")
-
 	// remove unpacker name
 	kParts = kParts[1:]
-
 	for i, part := range kParts {
 		kParts[i] = strcase.ToSnake(part)
 	}
-
 	return strings.Join(kParts, ".")
 }

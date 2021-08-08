@@ -29,7 +29,7 @@ func Send(w http.ResponseWriter, payload interface{}, code int) {
 func Error(ctx context.Context, w http.ResponseWriter, err interface{}, logger adapters.LogAdapterInterface) {
 	var msg interface{}
 
-	var code = http.StatusInternalServerError
+	code := http.StatusInternalServerError
 
 	// check whether err is a general error or a validation error
 	errG, isG := err.(error)

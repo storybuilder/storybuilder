@@ -129,7 +129,7 @@ func (repo *SamplePostgresRepository) mapResult(result []map[string]interface{})
 	// Notice the use of `named returned values` for this function (without which the recover pattern will not work).
 	defer func() {
 		if r := recover(); r != nil {
-			err = r.(error)
+			err, _ = r.(error)
 		}
 	}()
 

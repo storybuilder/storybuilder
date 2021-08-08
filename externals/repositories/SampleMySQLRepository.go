@@ -125,11 +125,11 @@ func (repo *SampleMySQLRepository) Delete(ctx context.Context, id int) error {
 // mapResult maps the result to entities.
 func (repo *SampleMySQLRepository) mapResult(result []map[string]interface{}) (samples []entities.Sample, err error) {
 	// Applying type assertion in this manner will result in a panic when the db data structure changes.
-	// This defer recover pattern is used to recover from the panic and to return an error instead.
+	// This defer-recover pattern is used to recover from the panic and to return an error instead.
 	// Notice the use of `named returned values` for this function (without which the recover pattern will not work).
 	defer func() {
 		if r := recover(); r != nil {
-			err = r.(error)
+			err, _ = r.(error)
 		}
 	}()
 
@@ -140,5 +140,5 @@ func (repo *SampleMySQLRepository) mapResult(result []map[string]interface{}) (s
 		})
 	}
 
-	return samples, nil
+	return samples, err
 }

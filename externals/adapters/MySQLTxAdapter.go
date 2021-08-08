@@ -55,7 +55,7 @@ func (a *MySQLTxAdapter) Wrap(ctx context.Context, fn func(ctx context.Context) 
 // Having a transaction already attached to context probably means that the calling function
 // has been wrapped in a transaction in a previous stage.
 // When this is the case use the existing attached transaction.
-// Otherwise create a new transaction and attach.
+// Otherwise, create a new transaction and attach.
 func (a *MySQLTxAdapter) attachTx(ctx context.Context) (context.Context, error) {
 	// check tx already exists
 	tx := ctx.Value(globals.TxKey)

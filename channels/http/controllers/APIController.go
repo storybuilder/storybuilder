@@ -27,7 +27,6 @@ func (ctl *APIController) GetInfo(w http.ResponseWriter, r *http.Request) {
 		Version: "v2.3.0",
 		Purpose: "REST API base written in Golang",
 	}
-
 	// send response
 	ctl.sendResponse(r.Context(), w, http.StatusOK, tr)
 }

@@ -7,7 +7,6 @@ import (
 	"regexp"
 	"strings"
 
-	// database driver for mysql.
 	_ "github.com/go-sql-driver/mysql"
 
 	"github.com/storybuilder/storybuilder/app/config"

@@ -103,7 +103,6 @@ func (ctl *SampleController) Add(w http.ResponseWriter, r *http.Request) {
 	// unpack request
 	sampleUnpacker := unpackers.NewSampleUnpacker()
 	err := request.Unpack(r, sampleUnpacker)
-
 	if err != nil {
 		ctl.sendError(ctx, w, err)
 		return
@@ -147,7 +146,6 @@ func (ctl *SampleController) Edit(w http.ResponseWriter, r *http.Request) {
 	// unpack request
 	sampleUnpacker := unpackers.NewSampleUnpacker()
 	err := request.Unpack(r, sampleUnpacker)
-
 	if err != nil {
 		ctl.sendError(ctx, w, err)
 		return

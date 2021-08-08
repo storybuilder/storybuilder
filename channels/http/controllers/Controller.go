@@ -36,7 +36,6 @@ func (ctl *Controller) sendResponse(_ context.Context, w http.ResponseWriter, co
 		response.Send(w, nil, code)
 		return
 	}
-
 	response.Send(w, response.Map(payload), code)
 }
 

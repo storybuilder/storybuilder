@@ -7,7 +7,6 @@ import (
 	"regexp"
 	"strings"
 
-	// database driver for postgres.
 	_ "github.com/lib/pq"
 
 	"github.com/storybuilder/storybuilder/app/config"
