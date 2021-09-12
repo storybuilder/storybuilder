@@ -16,6 +16,7 @@ func Init(ctr *container.Container) *mux.Router {
 	r := mux.NewRouter()
 
 	// initialize middleware
+	loggerMiddleware := middleware.NewLoggerMiddleware()
 	requestCheckerMiddleware := middleware.NewRequestCheckerMiddleware(ctr)
 	requestAlterMiddleware := middleware.NewRequestAlterMiddleware()
 	metricsMiddleware := middleware.NewMetricsMiddleware()
@@ -29,6 +30,7 @@ func Init(ctr *container.Container) *mux.Router {
 	// add CORS middleware
 	r.Use(mux.CORSMethodMiddleware(r))
 
+	r.Use(loggerMiddleware.Middleware)
 	r.Use(requestCheckerMiddleware.Middleware)
 	r.Use(requestAlterMiddleware.Middleware)
 
