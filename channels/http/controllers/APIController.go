@@ -23,8 +23,8 @@ func NewAPIController(ctr *container.Container) *APIController {
 func (ctl *APIController) GetInfo(w http.ResponseWriter, r *http.Request) {
 	// transform
 	tr := transformers.APITransformer{
-		Name:    "Catalyst",
-		Version: "v2.3.0",
+		Name:    "StoryBuilder",
+		Version: "v0.0.1",
 		Purpose: "REST API base written in Golang",
 	}
 	// send response
