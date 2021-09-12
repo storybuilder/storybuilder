@@ -35,7 +35,7 @@ func (repo *SampleMySQLRepository) Get(ctx context.Context) ([]entities.Sample, 
 
 // GetByID retrieves a single Sample.
 func (repo *SampleMySQLRepository) GetByID(ctx context.Context, id int) (entities.Sample, error) {
-	// NOTE: DBAdapters in Catalyst supports named parameters and you don't have to
+	// NOTE: DBAdapters support named parameters, and you don't have to
 	// 		 worry about the order in which those parameters are declared in the
 	//		 query and in the parameters map. The DBAdapter will take care of that.
 	query := `SELECT id, name, password
