@@ -1,0 +1,64 @@
+package transformers
+
+import (
+	"github.com/storybuilder/storybuilder/channels/http/errors"
+	"github.com/storybuilder/storybuilder/domain/entities"
+)
+
+// SampleTransformer is used to transform sample.
+type SampleTransformer struct {
+	ID   int    `json:"id"`
+	Name string `json:"name"`
+}
+
+// NewSampleTransformer creates a new instance of the transformer.
+func NewSampleTransformer() TransformerInterface {
+	return &SampleTransformer{}
+}
+
+// TransformAsObject map data to a transformer object.
+func (t *SampleTransformer) TransformAsObject(data interface{}) (interface{}, error) {
+	sample, ok := data.(entities.Sample)
+	if !ok {
+		return nil, t.dataMismatchError()
+	}
+
+	tr := SampleTransformer{
+		ID:   sample.ID,
+		Name: sample.Name,
+	}
+
+	return tr, nil
+}
+
+// TransformAsCollection map data to a collection of transformer objects.
+func (t *SampleTransformer) TransformAsCollection(data interface{}) (interface{}, error) {
+	// NOTE: Make sure that you declare the transformer slice in this manner.
+	//		 Otherwise the marshaller will return `null` instead of `[]` when
+	//		 marshalling empty slices
+	// https://apoorvam.github.io/blog/2017/golang-json-marshal-slice-as-empty-array-not-null/
+	trSamples := make([]SampleTransformer, 0)
+
+	samples, ok := data.([]entities.Sample)
+	if !ok {
+		return nil, t.dataMismatchError()
+	}
+
+	for _, sample := range samples {
+		tr, err := t.TransformAsObject(sample)
+		if err != nil {
+			return nil, err
+		}
+
+		trSample, _ := tr.(SampleTransformer)
+		trSamples = append(trSamples, trSample)
+	}
+
+	return trSamples, nil
+}
+
+// dataMismatchError returns a data mismatch error of TransformerError type.
+func (t *SampleTransformer) dataMismatchError() error {
+	dataMismatchErrorCode := 100
+	return errors.NewTransformerError("Cannot map given data to SampleTransformer", dataMismatchErrorCode, "")
+}
