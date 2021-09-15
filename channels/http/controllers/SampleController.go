@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/gorilla/mux"
+	chi "github.com/go-chi/chi/v5"
 
 	"github.com/storybuilder/storybuilder/app/container"
 	"github.com/storybuilder/storybuilder/channels/http/request"
@@ -64,8 +64,8 @@ func (ctl *SampleController) GetByID(w http.ResponseWriter, r *http.Request) {
 	ctx = ctl.withTrace(ctx, "SampleController.GetByID")
 
 	// get id from request
-	vars := mux.Vars(r)
-	id, _ := strconv.Atoi(vars["id"])
+	idVal := chi.URLParam(r, "id")
+	id, _ := strconv.Atoi(idVal)
 
 	// validate
 	errs := ctl.validator.ValidateField(id, "required,gt=0")
@@ -152,8 +152,8 @@ func (ctl *SampleController) Edit(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// get id from request
-	vars := mux.Vars(r)
-	id, _ := strconv.Atoi(vars["id"])
+	idVal := ctx.Value("id").(string)
+	id, _ := strconv.Atoi(idVal)
 
 	// validate request parameters
 	errs := ctl.validator.ValidateField(id, "required,gt=0")
@@ -196,8 +196,8 @@ func (ctl *SampleController) Delete(w http.ResponseWriter, r *http.Request) {
 	ctx = ctl.withTrace(ctx, "SampleController.Delete")
 
 	// get id from request
-	vars := mux.Vars(r)
-	id, _ := strconv.Atoi(vars["id"])
+	idVal := ctx.Value("id").(string)
+	id, _ := strconv.Atoi(idVal)
 
 	// validate request parameters
 	errs := ctl.validator.ValidateField(id, "required,gt=0")

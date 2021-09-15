@@ -1,9 +1,8 @@
 package router
 
 import (
-	"net/http"
-
-	"github.com/gorilla/mux"
+	chi "github.com/go-chi/chi/v5"
+	chiMiddleware "github.com/go-chi/chi/v5/middleware"
 
 	"github.com/storybuilder/storybuilder/app/container"
 	"github.com/storybuilder/storybuilder/channels/http/controllers"
@@ -11,12 +10,12 @@ import (
 )
 
 // Init initializes the router.
-func Init(ctr *container.Container) *mux.Router {
+func Init(ctr *container.Container) *chi.Mux {
 	// create new router
-	r := mux.NewRouter()
+	r := chi.NewRouter()
 
 	// initialize middleware
-	loggerMiddleware := middleware.NewLoggerMiddleware()
+	corsMiddleware := middleware.NewCORSMiddleware()
 	requestCheckerMiddleware := middleware.NewRequestCheckerMiddleware(ctr)
 	requestAlterMiddleware := middleware.NewRequestAlterMiddleware()
 	metricsMiddleware := middleware.NewMetricsMiddleware()
@@ -26,11 +25,9 @@ func Init(ctr *container.Container) *mux.Router {
 
 	// add metrics middleware first
 	r.Use(metricsMiddleware.Middleware)
-
-	// add CORS middleware
-	r.Use(mux.CORSMethodMiddleware(r))
-
-	r.Use(loggerMiddleware.Middleware)
+	r.Use(corsMiddleware)
+	r.Use(chiMiddleware.RequestID)
+	r.Use(chiMiddleware.Logger)
 	r.Use(requestCheckerMiddleware.Middleware)
 	r.Use(requestAlterMiddleware.Middleware)
 
@@ -41,14 +38,14 @@ func Init(ctr *container.Container) *mux.Router {
 	// bind controller functions to routes
 
 	// api info
-	r.HandleFunc("/", apiController.GetInfo).Methods(http.MethodGet)
+	r.Get("/", apiController.GetInfo)
 
 	// sample
-	r.HandleFunc("/samples", sampleController.Get).Methods(http.MethodGet)
-	r.HandleFunc("/samples/{id:[0-9]+}", sampleController.GetByID).Methods(http.MethodGet)
-	r.HandleFunc("/samples", sampleController.Add).Methods(http.MethodPost)
-	r.HandleFunc("/samples/{id:[0-9]+}", sampleController.Edit).Methods(http.MethodPut)
-	r.HandleFunc("/samples/{id:[0-9]+}", sampleController.Delete).Methods(http.MethodDelete)
+	r.Get("/samples", sampleController.Get)
+	r.Get("/samples/{id:[0-9]+}", sampleController.GetByID)
+	r.Post("/samples", sampleController.Add)
+	r.Put("/samples/{id:[0-9]+}", sampleController.Edit)
+	r.Delete("/samples/{id:[0-9]+}", sampleController.Delete)
 
 	return r
 }
