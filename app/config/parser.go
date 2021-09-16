@@ -23,28 +23,28 @@ func Parse(cfgDir string) *Config {
 // parseAppConfig parses application configurations.
 func parseAppConfig(dir string) AppConfig {
 	cfg := AppConfig{}
-	parseConfig(dir+"app.yaml", &cfg)
+	parseConfig(dir+AppCfgFile, &cfg)
 	return cfg
 }
 
 // parseLogConfig parses logger configurations.
 func parseLogConfig(dir string) LogConfig {
 	cfg := LogConfig{}
-	parseConfig(dir+"logger.yaml", &cfg)
+	parseConfig(dir+LogCfgFile, &cfg)
 	return cfg
 }
 
 // parseDBConfig parses database configurations.
 func parseDBConfig(dir string) DBConfig {
 	cfg := DBConfig{}
-	parseConfig(dir+"database.yaml", &cfg)
+	parseConfig(dir+DatabaseCfgFile, &cfg)
 	return cfg
 }
 
 // parseServicesConfig parses configurations of all services.
 func parseServicesConfig(dir string) []ServiceConfig {
 	var cfgs []ServiceConfig
-	parseConfig(dir+"services.yaml", &cfgs)
+	parseConfig(dir+ServicesCfgFile, &cfgs)
 	return cfgs
 }
 

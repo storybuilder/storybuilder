@@ -22,14 +22,11 @@ func NewSampleMySQLRepository(dbAdapter adapters.DBAdapterInterface) repositorie
 func (repo *SampleMySQLRepository) Get(ctx context.Context) ([]entities.Sample, error) {
 	query := `SELECT id, name, password
 				FROM sample`
-
 	parameters := map[string]interface{}{}
-
 	result, err := repo.db.Query(ctx, query, parameters)
 	if err != nil {
 		return nil, err
 	}
-
 	return repo.mapResult(result)
 }
 
@@ -41,25 +38,20 @@ func (repo *SampleMySQLRepository) GetByID(ctx context.Context, id int) (entitie
 	query := `SELECT id, name, password
 				FROM sample
 				WHERE id=?id`
-
 	parameters := map[string]interface{}{
 		"id": id,
 	}
-
 	result, err := repo.db.Query(ctx, query, parameters)
 	if err != nil {
 		return entities.Sample{}, err
 	}
-
 	mapped, err := repo.mapResult(result)
 	if err != nil {
 		return entities.Sample{}, err
 	}
-
 	if len(mapped) == 0 {
 		return entities.Sample{}, nil
 	}
-
 	return mapped[0], nil
 }
 
@@ -69,17 +61,14 @@ func (repo *SampleMySQLRepository) Add(ctx context.Context, sample entities.Samp
 				(name, password)
 				VALUES(?name, ?password)
 				`
-
 	parameters := map[string]interface{}{
 		"name":     sample.Name,
 		"password": sample.Password,
 	}
-
 	_, err := repo.db.Query(ctx, query, parameters)
 	if err != nil {
 		return err
 	}
-
 	return nil
 }
 
@@ -89,18 +78,15 @@ func (repo *SampleMySQLRepository) Edit(ctx context.Context, sample entities.Sam
 				SET name=?name, password=?password
 				WHERE id=?id
 				`
-
 	parameters := map[string]interface{}{
 		"id":       sample.ID,
 		"name":     sample.Name,
 		"password": sample.Password,
 	}
-
 	_, err := repo.db.Query(ctx, query, parameters)
 	if err != nil {
 		return err
 	}
-
 	return nil
 }
 
@@ -109,16 +95,13 @@ func (repo *SampleMySQLRepository) Delete(ctx context.Context, id int) error {
 	query := `DELETE FROM sample
 				WHERE id=?id
 				`
-
 	parameters := map[string]interface{}{
 		"id": id,
 	}
-
 	_, err := repo.db.Query(ctx, query, parameters)
 	if err != nil {
 		return err
 	}
-
 	return nil
 }
 
@@ -132,13 +115,11 @@ func (repo *SampleMySQLRepository) mapResult(result []map[string]interface{}) (s
 			err, _ = r.(error)
 		}
 	}()
-
 	for _, row := range result {
 		samples = append(samples, entities.Sample{
 			ID:   int(row["id"].(int64)),
 			Name: string(row["name"].([]byte)),
 		})
 	}
-
 	return samples, err
 }

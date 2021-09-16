@@ -28,7 +28,7 @@ func (cfg AppConfig) RenderAsTable() string {
 		table.Row{"Cache Life Window", cfg.Cache.LifeWindow},
 		table.Row{"Cache Hard Max Size", cfg.Cache.HardMaxSize})
 
-	title := "app.yaml"
+	title := AppCfgFile
 	return renderTable(rows, title)
 }
 

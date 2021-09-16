@@ -11,6 +11,5 @@ func (s *Sample) Delete(ctx context.Context, id int) error {
 	if err != nil {
 		return err
 	}
-
 	return nil
 }

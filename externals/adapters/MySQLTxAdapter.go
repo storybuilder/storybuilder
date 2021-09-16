@@ -27,25 +27,20 @@ func (a *MySQLTxAdapter) Wrap(ctx context.Context, fn func(ctx context.Context) 
 	if err != nil {
 		return nil, err
 	}
-
 	// get a reference to the attached transaction
 	tx := ctx.Value(globals.TxKey).(*sql.Tx)
-
 	res, err := fn(ctx)
 	if err != nil {
 		errRb := tx.Rollback()
 		if errRb != nil {
 			return nil, errRb
 		}
-
 		return nil, err
 	}
-
 	err = tx.Commit()
 	if err != nil {
 		return nil, err
 	}
-
 	return res, nil
 }
 
@@ -62,12 +57,10 @@ func (a *MySQLTxAdapter) attachTx(ctx context.Context) (context.Context, error) 
 	if tx != nil {
 		return ctx, nil
 	}
-
 	// attach new tx
 	tx, err := a.dba.NewTransaction()
 	if err != nil {
 		return nil, err
 	}
-
 	return context.WithValue(ctx, globals.TxKey, tx), nil
 }

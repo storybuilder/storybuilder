@@ -19,12 +19,9 @@ type ValidatorAdapter struct {
 // NewValidatorAdapter creates a new validator adapter instance.
 func NewValidatorAdapter() (adapters.ValidatorAdapterInterface, error) {
 	a := &ValidatorAdapter{}
-
 	a.validate = validator.New()
-
 	en := localsEn.New()
 	a.uni = ut.New(en, en)
-
 	return a, nil
 }
 
@@ -36,10 +33,8 @@ func (a *ValidatorAdapter) Validate(data interface{}) map[string]string {
 	if err == nil {
 		return nil
 	}
-
 	// from here you can create your own error messages in whatever language you wish
 	errs := err.(validator.ValidationErrors)
-
 	return errs.Translate(a.getTranslator("en"))
 }
 
@@ -50,10 +45,8 @@ func (a *ValidatorAdapter) ValidateField(field interface{}, rules string) map[st
 	if err == nil {
 		return nil
 	}
-
 	// from here you can create your own error messages in whatever language you wish
 	errs := err.(validator.ValidationErrors)
-
 	return errs.Translate(a.getTranslator("en"))
 }
 
@@ -62,11 +55,9 @@ func (a *ValidatorAdapter) getTranslator(locale string) ut.Translator {
 	// this is usually know or extracted from http 'Accept-Language' header
 	// also see uni.FindTranslator(...)
 	trans, _ := a.uni.GetTranslator(locale)
-
 	err := enTranslations.RegisterDefaultTranslations(a.validate, trans)
 	if err != nil {
 		return nil
 	}
-
 	return trans
 }

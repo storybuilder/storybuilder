@@ -13,7 +13,6 @@ func (s *Sample) Get(ctx context.Context) ([]entities.Sample, error) {
 	if err != nil {
 		return nil, err
 	}
-
 	return samples, nil
 }
 
@@ -24,10 +23,8 @@ func (s *Sample) GetByID(ctx context.Context, id int) (entities.Sample, error) {
 	if err != nil {
 		return entities.Sample{}, err
 	}
-
 	if sample.ID == 0 {
 		return entities.Sample{}, s.errorNoSample(id)
 	}
-
 	return sample, nil
 }

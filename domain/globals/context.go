@@ -17,10 +17,8 @@ const TxKey contextKey = "Tx"
 // AddTrace appends the given prefix string to the globals.PrefixKey.
 func AddTrace(ctx context.Context, prefix string) context.Context {
 	pfx := ctx.Value(PrefixKey)
-
 	if pfx == nil {
 		return context.WithValue(ctx, PrefixKey, prefix)
 	}
-
 	return context.WithValue(ctx, PrefixKey, pfx.(string)+"."+prefix)
 }

@@ -25,12 +25,10 @@ func NewLogAdapter(cfg config.LogConfig) (adapters.LogAdapterInterface, error) {
 	a := &LogAdapter{
 		cfg: cfg,
 	}
-
 	err := a.initLogFile()
 	if err != nil {
 		return nil, err
 	}
-
 	return a, nil
 }
 

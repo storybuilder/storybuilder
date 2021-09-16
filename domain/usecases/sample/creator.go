@@ -20,6 +20,5 @@ func (s *Sample) Add(ctx context.Context, sample entities.Sample) error {
 	if err != nil {
 		return err
 	}
-
 	return nil
 }

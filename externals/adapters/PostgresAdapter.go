@@ -26,28 +26,23 @@ type PostgresAdapter struct {
 func NewPostgresAdapter(cfg config.DBConfig) (adapters.DBAdapterInterface, error) {
 	connString := fmt.Sprintf("user=%s password=%s dbname=%s host=%s port=%d sslmode=disable",
 		cfg.User, cfg.Password, cfg.Database, cfg.Host, cfg.Port)
-
 	db, err := sql.Open("postgres", connString)
 	if err != nil {
 		return nil, err
 	}
-
 	// pool configurations
 	db.SetMaxOpenConns(cfg.PoolSize)
 	// db.SetMaxIdleConns(2)
 	// db.SetConnMaxLifetime(time.Hour)
-
 	a := &PostgresAdapter{
 		cfg:      cfg,
 		pool:     db,
 		pqPrefix: "?",
 	}
-
 	// check whether the db is accessible
 	if cfg.Check {
 		return a, a.Ping()
 	}
-
 	return a, nil
 }
 
@@ -59,17 +54,14 @@ func (a *PostgresAdapter) Ping() error {
 // Query runs a query and returns the result.
 func (a *PostgresAdapter) Query(ctx context.Context, query string, parameters map[string]interface{}) ([]map[string]interface{}, error) {
 	convertedQuery, placeholders := a.convertQuery(query)
-
 	reorderedParameters, err := a.reorderParameters(parameters, placeholders)
 	if err != nil {
 		return nil, err
 	}
-
 	statement, err := a.prepareStatement(ctx, convertedQuery)
 	if err != nil {
 		return nil, err
 	}
-
 	// check whether the query is a select statement
 	if strings.EqualFold(convertedQuery[:1], "s") {
 		rows, err := statement.Query(reorderedParameters...)
@@ -79,12 +71,10 @@ func (a *PostgresAdapter) Query(ctx context.Context, query string, parameters ma
 
 		return a.prepareDataSet(rows)
 	}
-
 	result, err := statement.Exec(reorderedParameters...)
 	if err != nil {
 		return nil, err
 	}
-
 	return a.prepareResultSet(result)
 }
 
@@ -105,13 +95,10 @@ func (a *PostgresAdapter) Destruct() {
 func (a *PostgresAdapter) convertQuery(query string) (qry string, namedParams []string) {
 	query = strings.TrimSpace(query)
 	exp := regexp.MustCompile(`\` + a.pqPrefix + `\w+`)
-
 	namedParams = exp.FindAllString(query, -1)
-
 	for i := 0; i < len(namedParams); i++ {
 		namedParams[i] = strings.TrimPrefix(namedParams[i], a.pqPrefix)
 	}
-
 	paramPosition := 0
 	query = string(exp.ReplaceAllFunc([]byte(query), func(param []byte) []byte {
 		paramPosition++
@@ -119,25 +106,20 @@ func (a *PostgresAdapter) convertQuery(query string) (qry string, namedParams []
 
 		return []byte(paramName)
 	}))
-
 	return query, namedParams
 }
 
 // Reorder the parameters map in the order of named parameters slice.
 func (a *PostgresAdapter) reorderParameters(params map[string]interface{}, namedParams []string) ([]interface{}, error) {
 	var reorderedParams []interface{}
-
 	for _, param := range namedParams {
 		// return an error if a named parameter is missing from params
 		paramValue, isParamExist := params[param]
-
 		if !isParamExist {
 			return nil, externalErrs.NewAdapterError(fmt.Sprintf("parameter '%s' is missing", param), 100, "")
 		}
-
 		reorderedParams = append(reorderedParams, paramValue)
 	}
-
 	return reorderedParams, nil
 }
 
@@ -150,7 +132,6 @@ func (a *PostgresAdapter) prepareStatement(ctx context.Context, query string) (*
 	if tx != nil {
 		return tx.(*sql.Tx).Prepare(query)
 	}
-
 	return a.pool.Prepare(query)
 }
 
@@ -159,50 +140,38 @@ func (a *PostgresAdapter) prepareStatement(ctx context.Context, query string) (*
 // Source: https://kylewbanks.com/blog/query-result-to-map-in-golang
 func (a *PostgresAdapter) prepareDataSet(rows *sql.Rows) ([]map[string]interface{}, error) {
 	defer rows.Close()
-
 	var data []map[string]interface{}
-
 	cols, _ := rows.Columns()
-
 	// create a slice of interface{}'s to represent each column
 	// and a second slice to contain pointers to each item in the columns slice
 	columns := make([]interface{}, len(cols))
 	columnPointers := make([]interface{}, len(cols))
-
 	for i := range columns {
 		columnPointers[i] = &columns[i]
 	}
-
 	for rows.Next() {
 		// scan the result into the column pointers
 		err := rows.Scan(columnPointers...)
 		if err != nil {
 			return nil, err
 		}
-
 		// create our map, and retrieve the value for each column from the pointers slice
 		// storing it in the map with the name of the column as the key
 		row := make(map[string]interface{})
-
 		for i, colName := range cols {
 			val := columnPointers[i].(*interface{})
 			row[colName] = *val
 		}
-
 		data = append(data, row)
 	}
-
 	return data, nil
 }
 
 // Prepare the result set for all other queries.
 func (a *PostgresAdapter) prepareResultSet(result sql.Result) ([]map[string]interface{}, error) {
 	var data []map[string]interface{}
-
 	row := make(map[string]interface{})
-
 	row["affected_rows"], _ = result.RowsAffected()
 	row["last_insert_id"], _ = result.LastInsertId()
-
 	return append(data, row), nil
 }
