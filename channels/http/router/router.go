@@ -13,12 +13,12 @@ func Init(ctr *container.Container) *chi.Mux {
 	r := chi.NewRouter()
 
 	// initialize middleware
+	metrics := middleware.NewMetricsMiddleware()
 	cors := middleware.NewCORSMiddleware()
+	logger := middleware.NewLoggerMiddleware()
 	requestID := middleware.NewRequestIDMiddleware()
 	requestChecker := middleware.NewRequestCheckerMiddleware(ctr)
 	requestAlter := middleware.NewRequestAlterMiddleware()
-	metrics := middleware.NewMetricsMiddleware()
-	logger := middleware.NewLoggerMiddleware()
 
 	// add middleware to router
 	// NOTE: middleware will execute in the order they are added to the router
@@ -26,8 +26,8 @@ func Init(ctr *container.Container) *chi.Mux {
 	// add metrics middleware first
 	r.Use(metrics.Middleware)
 	r.Use(cors.Middleware)
-	r.Use(requestID.Middleware)
 	r.Use(logger.Middleware)
+	r.Use(requestID.Middleware)
 	r.Use(requestChecker.Middleware)
 	r.Use(requestAlter.Middleware)
 
