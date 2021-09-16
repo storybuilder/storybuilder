@@ -1,7 +1,7 @@
 package router
 
 import (
-	chi "github.com/go-chi/chi/v5"
+	"github.com/go-chi/chi/v5"
 
 	"github.com/storybuilder/storybuilder/app/container"
 	"github.com/storybuilder/storybuilder/channels/http/controllers"

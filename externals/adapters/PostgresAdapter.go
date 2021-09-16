@@ -51,7 +51,7 @@ func NewPostgresAdapter(cfg config.DBConfig) (adapters.DBAdapterInterface, error
 	return a, nil
 }
 
-// Ping checks wether the database is accessible.
+// Ping checks whether the database is accessible.
 func (a *PostgresAdapter) Ping() error {
 	return a.pool.Ping()
 }
@@ -195,7 +195,7 @@ func (a *PostgresAdapter) prepareDataSet(rows *sql.Rows) ([]map[string]interface
 	return data, nil
 }
 
-// Prepare the resultset for all other queries.
+// Prepare the result set for all other queries.
 func (a *PostgresAdapter) prepareResultSet(result sql.Result) ([]map[string]interface{}, error) {
 	var data []map[string]interface{}
 

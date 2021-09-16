@@ -55,9 +55,9 @@ func (a *PostgresTxAdapter) Wrap(ctx context.Context, fn func(ctx context.Contex
 // Having a transaction already attached to context probably means that the calling function
 // has been wrapped in a transaction in a previous stage.
 // When this is the case use the existing attached transaction.
-// Otherwise create a new transaction and attach.
+// Otherwise, create a new transaction and attach.
 func (a *PostgresTxAdapter) attachTx(ctx context.Context) (context.Context, error) {
-	// check tx altready exists
+	// check tx already exists
 	tx := ctx.Value(globals.TxKey)
 	if tx != nil {
 		return ctx, nil

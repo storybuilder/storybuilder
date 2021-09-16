@@ -8,3 +8,7 @@ metrics:
   enabled: true
   port: 3001
   route: /metrics
+
+cache:
+  life-window: 24h
+  hard-max-size: 5

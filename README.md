@@ -1,4 +1,3 @@
 # StoryBuilder
-
 ---
 StoryBuilder API

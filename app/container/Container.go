@@ -21,6 +21,7 @@ type Adapters struct {
 	DBTxAdapter      adapters.DBTxAdapterInterface
 	LogAdapter       adapters.LogAdapterInterface
 	ValidatorAdapter adapters.ValidatorAdapterInterface
+	CacheAdapter     adapters.CacheAdapterInterface
 }
 
 // Repositories hold resolved repository instances.

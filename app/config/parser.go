@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	yaml "gopkg.in/yaml.v2"
+	"gopkg.in/yaml.v2"
 )
 
 // Parse parses all configuration to a single Config object.
@@ -58,7 +58,7 @@ func parseConfig(file string, unpacker interface{}) {
 	}
 }
 
-// getConfigDir returns config directory path after analysing and correcting.
+// getConfigDir returns config directory path after analyzing and correcting.
 func getConfigDir(dir string) string {
 	// get last char of dir path
 	c := dir[len(dir)-1]

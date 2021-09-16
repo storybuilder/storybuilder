@@ -16,6 +16,7 @@ type AppConfig struct {
 	Port     int          `yaml:"port"`
 	Timezone string       `yaml:"timezone"`
 	Metrics  MetricConfig `yaml:"metrics"`
+	Cache    CacheConfig  `yaml:"cache"`
 }
 
 // DBConfig holds database configurations.
@@ -50,4 +51,10 @@ type ServiceConfig struct {
 	Name    string `yaml:"name"`
 	URL     string `yaml:"url"`
 	Timeout int    `yaml:"timeout"`
+}
+
+// CacheConfig holds cache configurations.
+type CacheConfig struct {
+	LifeWindow  string `yaml:"life-window"`
+	HardMaxSize int    `yaml:"hard-max-size"`
 }

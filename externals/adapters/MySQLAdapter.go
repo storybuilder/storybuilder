@@ -189,7 +189,7 @@ func (a *MySQLAdapter) prepareDataSet(rows *sql.Rows) ([]map[string]interface{},
 	return data, nil
 }
 
-// Prepare the resultset for all other queries.
+// Prepare the result set for all other queries.
 func (a *MySQLAdapter) prepareResultSet(result sql.Result) ([]map[string]interface{}, error) {
 	var data []map[string]interface{}
 

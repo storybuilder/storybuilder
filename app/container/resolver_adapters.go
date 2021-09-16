@@ -15,6 +15,7 @@ func resolveAdapters(cfg *config.Config) Adapters {
 	resolveDBTransactionAdapter()
 	resolveLogAdapter(cfg.LogConfig)
 	resolveValidatorAdapter()
+	resolveCacheAdapter(cfg.AppConfig.Cache)
 
 	return resolvedAdapters
 }
@@ -54,4 +55,13 @@ func resolveValidatorAdapter() {
 	}
 
 	resolvedAdapters.ValidatorAdapter = v
+}
+
+// resolveCacheAdapter resolves the cache adapter.
+func resolveCacheAdapter(cfg config.CacheConfig) {
+	cache, err := adapters.NewFreeCacheAdapter(cfg)
+	if err != nil {
+		panic(fmt.Sprintf("error: %v", err))
+	}
+	resolvedAdapters.CacheAdapter = cache
 }

@@ -14,7 +14,7 @@ import (
 )
 
 // Run runs a server to exposes metrics as a separate Prometheus metric server.
-func Run(cfg config.AppConfig, ctr *container.Container) {
+func Run(cfg config.AppConfig, _ *container.Container) {
 	if !cfg.Metrics.Enabled {
 		return
 	}

@@ -13,4 +13,7 @@ func (ctr *Container) Destruct() {
 
 	fmt.Println("Closing logger...")
 	ctr.Adapters.LogAdapter.Destruct()
+
+	fmt.Println("Clearing cache...")
+	ctr.Adapters.CacheAdapter.Destruct()
 }

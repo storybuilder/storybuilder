@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"strconv"
 
-	chi "github.com/go-chi/chi/v5"
+	"github.com/go-chi/chi/v5"
 
 	"github.com/storybuilder/storybuilder/app/container"
 	"github.com/storybuilder/storybuilder/channels/http/request"
@@ -116,13 +116,13 @@ func (ctl *SampleController) Add(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// bind unpacked data to entities
-	sample := entities.Sample{
+	smpl := entities.Sample{
 		Name:     sampleUnpacker.Name,
 		Password: sampleUnpacker.Password,
 	}
 
 	// add
-	err = ctl.sampleUseCase.Add(ctx, sample)
+	err = ctl.sampleUseCase.Add(ctx, smpl)
 	if err != nil {
 		ctl.sendError(ctx, w, err)
 		return
@@ -170,14 +170,14 @@ func (ctl *SampleController) Edit(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// bind unpacked data to entities
-	sample := entities.Sample{
+	smpl := entities.Sample{
 		ID:       id,
 		Name:     sampleUnpacker.Name,
 		Password: sampleUnpacker.Password,
 	}
 
 	// edit
-	err = ctl.sampleUseCase.Edit(ctx, sample)
+	err = ctl.sampleUseCase.Edit(ctx, smpl)
 	if err != nil {
 		ctl.sendError(ctx, w, err)
 		return

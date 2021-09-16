@@ -50,7 +50,7 @@ func Error(ctx context.Context, w http.ResponseWriter, err interface{}, logger a
 func toJSON(payload interface{}) []byte {
 	msg, err := json.Marshal(payload)
 	if err != nil {
-		fmt.Printf("JSON Marshalling Error: %v", err)
+		fmt.Printf("JSON Marshaling Error: %v", err)
 	}
 
 	return msg
