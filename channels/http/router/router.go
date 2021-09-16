@@ -1,9 +1,7 @@
 package router
 
 import (
-	chi "github.com/go-chi/chi/v5"
-	chiMiddleware "github.com/go-chi/chi/v5/middleware"
-
+	"github.com/go-chi/chi/v5"
 	"github.com/storybuilder/storybuilder/app/container"
 	"github.com/storybuilder/storybuilder/channels/http/controllers"
 	"github.com/storybuilder/storybuilder/channels/http/middleware"
@@ -15,21 +13,23 @@ func Init(ctr *container.Container) *chi.Mux {
 	r := chi.NewRouter()
 
 	// initialize middleware
-	corsMiddleware := middleware.NewCORSMiddleware()
-	requestCheckerMiddleware := middleware.NewRequestCheckerMiddleware(ctr)
-	requestAlterMiddleware := middleware.NewRequestAlterMiddleware()
-	metricsMiddleware := middleware.NewMetricsMiddleware()
+	cors := middleware.NewCORSMiddleware()
+	requestID := middleware.NewRequestIDMiddleware()
+	requestChecker := middleware.NewRequestCheckerMiddleware(ctr)
+	requestAlter := middleware.NewRequestAlterMiddleware()
+	metrics := middleware.NewMetricsMiddleware()
+	logger := middleware.NewLoggerMiddleware()
 
 	// add middleware to router
 	// NOTE: middleware will execute in the order they are added to the router
 
 	// add metrics middleware first
-	r.Use(metricsMiddleware.Middleware)
-	r.Use(corsMiddleware)
-	r.Use(chiMiddleware.RequestID)
-	r.Use(chiMiddleware.Logger)
-	r.Use(requestCheckerMiddleware.Middleware)
-	r.Use(requestAlterMiddleware.Middleware)
+	r.Use(metrics.Middleware)
+	r.Use(cors.Middleware)
+	r.Use(requestID.Middleware)
+	r.Use(logger.Middleware)
+	r.Use(requestChecker.Middleware)
+	r.Use(requestAlter.Middleware)
 
 	// initialize controllers
 	apiController := controllers.NewAPIController(ctr)
