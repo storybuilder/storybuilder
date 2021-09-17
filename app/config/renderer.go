@@ -1,9 +1,10 @@
 package config
 
 import (
+	"strings"
+
 	"github.com/jedib0t/go-pretty/v6/table"
 	"github.com/jedib0t/go-pretty/v6/text"
-	"strings"
 )
 
 type Renderer interface {
@@ -27,7 +28,6 @@ func (cfg AppConfig) RenderAsTable() string {
 	rows = append(rows,
 		table.Row{"Cache Life Window", cfg.Cache.LifeWindow},
 		table.Row{"Cache Hard Max Size", cfg.Cache.HardMaxSize})
-
 	title := AppCfgFile
 	return renderTable(rows, title)
 }
