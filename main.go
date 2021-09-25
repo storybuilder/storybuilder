@@ -20,7 +20,7 @@ func main() {
 	// parse all configurations
 	cfg := config.Parse("./configs")
 
-	println(cfg.AppConfig.RenderAsTable())
+	println(cfg.RenderAsTable())
 
 	// resolve the container using parsed configurations
 	ctr := container.Resolve(cfg)

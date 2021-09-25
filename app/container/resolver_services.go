@@ -12,7 +12,6 @@ var resolvedServices Services
 // resolveServices resolves all services.
 func resolveServices(cfgs []config.ServiceConfig) Services {
 	resolveSampleService(getConfigByName(cfgs, "sample"))
-
 	return resolvedServices
 }
 
@@ -28,7 +27,6 @@ func getConfigByName(cfgs []config.ServiceConfig, name string) config.ServiceCon
 			return cfgs[i]
 		}
 	}
-
 	// must panic if the config is not found
 	panic(fmt.Sprintf("Cannot find service configurations for `%s` service", name))
 }

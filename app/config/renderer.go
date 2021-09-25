@@ -11,6 +11,11 @@ type Renderer interface {
 	RenderAsTable() string
 }
 
+func (cfg Config) RenderAsTable() string {
+	return cfg.AppConfig.RenderAsTable() + "\n" +
+		cfg.DBConfig.RenderAsTable()
+}
+
 func (cfg AppConfig) RenderAsTable() string {
 	rows := []table.Row{
 		{"Name", cfg.Name},
@@ -29,6 +34,17 @@ func (cfg AppConfig) RenderAsTable() string {
 		table.Row{"Cache Life Window", cfg.Cache.LifeWindow},
 		table.Row{"Cache Hard Max Size", cfg.Cache.HardMaxSize})
 	title := AppCfgFile
+	return renderTable(rows, title)
+}
+
+func (cfg DBConfig) RenderAsTable() string {
+	rows := []table.Row{
+		{"Host", cfg.Host},
+		{"Port", cfg.Port},
+		{"Database", cfg.Database},
+		{"Pool Size", cfg.PoolSize},
+	}
+	title := DatabaseCfgFile
 	return renderTable(rows, title)
 }
 
