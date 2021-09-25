@@ -19,8 +19,8 @@ func main() {
 
 	// parse all configurations
 	cfg := config.Parse("./configs")
-
-	println(cfg.RenderAsTable())
+	// prints all parsed configurations
+	cfg.Show()
 
 	// resolve the container using parsed configurations
 	ctr := container.Resolve(cfg)

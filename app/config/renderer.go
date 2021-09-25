@@ -1,6 +1,7 @@
 package config
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/jedib0t/go-pretty/v6/table"
@@ -9,6 +10,10 @@ import (
 
 type Renderer interface {
 	RenderAsTable() string
+}
+
+func (cfg Config) Show() {
+	fmt.Println(cfg.RenderAsTable())
 }
 
 func (cfg Config) RenderAsTable() string {
