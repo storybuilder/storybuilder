@@ -25,7 +25,7 @@ func main() {
 	// resolve the container using parsed configurations
 	ctr := container.Resolve(cfg)
 
-	// start the server to handle http requestss
+	// start the server to handle http requests
 	srv := httpServer.Run(cfg.AppConfig, ctr)
 
 	// start the server to expose application metrics
