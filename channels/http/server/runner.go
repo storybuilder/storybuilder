@@ -26,7 +26,7 @@ func Run(cfg config.AppConfig, ctr *container.Container) *http.Server {
 		ReadTimeout:  time.Second * 15,
 		IdleTimeout:  time.Second * 60,
 
-		// pass our instance of gorilla/mux in
+		// pass our instance of chi.Mux in
 		Handler: r,
 	}
 
